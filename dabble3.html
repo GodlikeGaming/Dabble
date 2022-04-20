@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <style>
+         .bar {
+            fill: green;
+         }
+        
+         .highlight {
+            fill: red;
+         }
+         
+         .title {
+            fill: blue;
+            font-weight: bold;
+         }
+      </style>
+      <script src = "TileManager.js"></script>
+      <script src = "BoardManager.js"></script>
+      <script src = "https://d3js.org/d3.v5.min.js"></script>
+      <title> Animated bar chart </title>
+   </head>
+
+   <body>
+      <svg width = "1000" height = "1000"></svg>
+      <script>
+          window.timeout
+         var svg = d3.select("svg"),
+         margin = 200, width = svg.attr("width") - margin,
+         height = svg.attr("height") - margin;
+         
+         var g = svg.append("g");
+        
+        var boardManager = new BoardManager(g);
+         
+        var tileManager = new TileManager(g, boardManager);
+
+         
+
+         var ticked = () => {
+             boardManager.draw();
+             tileManager.draw();
+         }
+         var simulation = d3
+            .forceSimulation()
+            .alphaDecay(0)
+            .on('tick', ticked)
+
+
+
+         
+         
+
+             
+      </script>
+   </body>
+</html>
