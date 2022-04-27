@@ -170,7 +170,7 @@ class GameManager {
 
     ClickSquare(square) {
         if (this.selectedTile !== null) {
-            
+            this.selectedTile 
         }
     }
 
