@@ -4,18 +4,37 @@ class BoardManager {
         this.tileWidth = 110;
         this.tileHeight = 110;
 
-        this.square_list = 
-        [
-        ]
+        this.boardWidth = 8;
+        this.boardHeight = 6;
+        this.square_list = []
 
-        for (let x = 0; x < 8; x++) {
-            for (let y = 0; y < 8; y++) {
-                this.square_list.push(new Square(x*this.tileWidth,y*this.tileHeight));
+        for (let x = 0; x < this.boardWidth; x++) {
+            for (let y = 0; y < this.boardHeight; y++) {
+                this.square_list.push(new Square(x,y,x*this.tileWidth,y*this.tileHeight));
             }
         }
+
+        this.handList = []
+
+        for (let i = 0; i < 7; i++) {
+            this.handList.push(new TileHolder(i*this.tileWidth,700));
+        }
     }
+    AddTileToHand(tile) {
+        this.handList.filter(x => x.tile === null)[0].AddTile(tile);
+    }
+    GetSquares(){
+        return this.square_list;
+    }
+    PlaceTilesInHand(tiles){
+        tiles.forEach(t => {
+            t.currentSquare.ClearTile();
+            this.handList.filter(x => x.tile === null)[0].AddTile(t)
+        })
+    }
+
     isPointInsideSquare(x, y){
-        return this.square_list.filter(d => 
+        return this.square_list.concat(this.handList).filter(d => 
             x >= d.x- this.tileWidth / 2 && 
             x <= d.x+ this.tileWidth / 2 &&
             y >= d.y- this.tileHeight / 2 && 
@@ -46,21 +65,36 @@ class BoardManager {
                    .attr('fill', 'green')
                    .attr('pointer-events', 'none')
                    .style('stroke-width', 2)
-                   .style('stroke', 'black'),
+                   .style('stroke', 'black')
+                   .on('click', (d) => window.gameManager.ClickSquare(d)),
                    
            )
 
     }
 }
 
-class Square {
+class TileHolder {
     constructor(x,y) {
         this.x = x;
         this.y = y;
         this.tile = null;
     }
-
     AddTile(tile) {
         this.tile = tile;
+        tile.x = this.x+5;
+        tile.y = this.y+5;
+        tile.currentSquare = this;
+    }
+    ClearTile() {
+        this.tile.currentSquare = null;
+        this.tile = null;
+    }
+}
+
+class Square extends TileHolder {
+    constructor(boardX, boardY, x,y) {
+        super(x,y)
+        this.boardX = boardX;
+        this.boardY = boardY;
     }
 }

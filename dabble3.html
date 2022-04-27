@@ -15,9 +15,13 @@
             font-weight: bold;
          }
       </style>
+          
       <script src = "TileManager.js"></script>
       <script src = "BoardManager.js"></script>
-      <script src = "https://d3js.org/d3.v5.min.js"></script>
+      <script src = "GameManager.js"></script>
+      <script src = "EnglishWords.js"></script>
+      <!-- <script src = "https://d3js.org/d3.v5.min.js"></script> -->
+      <script src = "d3.v5.min.js"></script>
       <title> Animated bar chart </title>
    </head>
 
@@ -28,18 +32,29 @@
          var svg = d3.select("svg"),
          margin = 200, width = svg.attr("width") - margin,
          height = svg.attr("height") - margin;
+         window.width = svg.attr('width')
+         window.height = svg.attr('height')
          
+
          var g = svg.append("g");
         
         var boardManager = new BoardManager(g);
-         
-        var tileManager = new TileManager(g, boardManager);
 
+        var englishWords = new EnglishWords();
+
+        var gameManager = new GameManager(g, boardManager, englishWords);
+        
+        window.gameManager = gameManager;
+
+        var tileManager = new TileManager(g, boardManager, gameManager);
+
+        window.tileManager = tileManager;
          
 
          var ticked = () => {
              boardManager.draw();
              tileManager.draw();
+             gameManager.draw();
          }
          var simulation = d3
             .forceSimulation()
