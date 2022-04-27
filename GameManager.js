@@ -5,6 +5,8 @@ class GameManager {
         this.englishWords = englishWords;
         this.totalPoints = 0;
         this.tilesInBagCount = 14;
+        // omuse controls
+        this.selectedTile = null;
 
         this.tilesInBag = 
         [
@@ -160,17 +162,24 @@ class GameManager {
     }
     
     ClickTile(tile) {
-
-        if (this.selectedTile === null) {
+        if (tile.addedToBoard) return;
+        if (this.selectedTile !== null) {
             // if a tile is selected
-        } else {
-            this.selectedTile = tile;
-        }
+            window.tileManager.DeHighlight(this.selectedTile);
+        } 
+
+        window.tileManager.Highlight(tile);
+        this.selectedTile = tile;
+        
     }
 
     ClickSquare(square) {
+        console.log(this.selectedTile);
         if (this.selectedTile !== null) {
-            this.selectedTile 
+            this.selectedTile.currentSquare.ClearTile();
+            square.AddTile(this.selectedTile);
+            window.tileManager.DeHighlight(this.selectedTile);
+            this.selectedTile = null;
         }
     }
 

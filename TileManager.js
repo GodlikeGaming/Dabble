@@ -29,13 +29,24 @@ class TileManager {
         });
     }
 
+    Highlight(tile) {
+        this.tiles.filter(d => d === tile)
+        .style('stroke-width', 5)
+        .style("stroke-dasharray", ("10, 3"))
+    }
+
+    DeHighlight(tile) {
+        this.tiles.filter(d => d === tile)
+        .style('stroke-width', 2)
+        .style("stroke-dasharray", null)
+    }
+
     draw(){
         var g = this.g;
         var dragged = (d) => {
             if (d.addedToBoard) return;
             d.x = d3.event.x
             d.y = d3.event.y
-
             var insideSquare = this.boardManager.isPointInsideSquare(d.x, d.y);
             if (insideSquare && !insideSquare.tile) {
                 d.x = insideSquare.x+5;
@@ -48,6 +59,7 @@ class TileManager {
             var insideSquare = this.boardManager.isPointInsideSquare(d.x, d.y);
             // is mouse inside square
             if (insideSquare) {
+                this.DeHighlight(d);
                 if (insideSquare.tile && !insideSquare.tile.addedToBoard) {
                     d.currentSquare.AddTile(insideSquare.tile);
                     insideSquare.AddTile(d);
@@ -68,6 +80,7 @@ class TileManager {
          }
          var dragstarted = (d) => {
             if (d.addedToBoard) return;
+            window.gameManager.ClickTile(d)
             g.style('cursor', 'grabbing')
          }
 
@@ -94,13 +107,13 @@ class TileManager {
                    .style('stroke', 'black')
                    .attr("rx", 10)
                    .style('cursor', 'pointer')
+                   .on('click', (d) => {window.gameManager.ClickTile(d)})
                    .call(
                        d3.drag()
                        .on('drag', dragged)
                        .on('end', dragended)
                        .on('start', dragstarted) 
                    )
-                   .on('click', (d) => {window.gameManger.ClickTile(d)})
                     ,
                    update => update
                    .attr('x', d => d.x)

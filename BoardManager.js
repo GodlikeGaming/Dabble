@@ -63,7 +63,6 @@ class BoardManager {
                    .attr('width', '11%')
                    .attr('height', '11%')
                    .attr('fill', 'green')
-                   .attr('pointer-events', 'none')
                    .style('stroke-width', 2)
                    .style('stroke', 'black')
                    .on('click', (d) => window.gameManager.ClickSquare(d)),
