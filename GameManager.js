@@ -7,6 +7,7 @@ class GameManager {
         this.tilesInBagCount = 14;
         // omuse controls
         this.selectedTile = null;
+        this.currentStatusMessage = {msg: "", id: 0};
 
         this.tilesInBag = 
         [
@@ -157,7 +158,37 @@ class GameManager {
                         .attr('pointer-events', 'none'),
                 )
         
-
+            // this.statusMsg = this.g
+            //     .selectAll('.statusMessage')
+            //     .data([{msg: "", id: 0}], d => d.id)
+            //     join (enter => 
+            //         enter
+            //             .append('text')
+            //             .attr('class', 'statusMessage')
+            //             .attr('x', 500)
+            //             .attr('y', 500)
+            //             .text(d => d.msg)
+            //             .style('text-anchor', 'middle')
+            //             .style('fill', 'black')
+            //             .attr('font-size', 30)
+            //     )
+            
+            this.submitText = this.g
+            .selectAll('.t')
+            .data([this.currentStatusMessage], d => d.id)
+            .join (enter => 
+                enter
+                    .append('text')
+                    .attr('class', 't')
+                    .attr('x', 400 + 75)
+                    .attr('y', 200 + 50 + 10)
+                    .text(d => d.msg)
+                    .style('text-anchor', 'middle')
+                    .style('fill', 'white')
+                    .attr('font-size', 50)
+                    .attr('pointer-events', 'none'),
+                update => update.text(d => d.msg)
+            )
 
     }
     
@@ -187,6 +218,7 @@ class GameManager {
         var wordFound = false;
         var word = "";
         var words = this.FindWords();
+        this.currentStatusMessage.msg = words.msg;
         console.log(words);
     }
 
@@ -279,6 +311,10 @@ class GameManager {
             var scoredPoints = words.filter(w => w.length > 1).reduce((allPoints, word) => allPoints + word.reduce((wordPoint, letter) => wordPoint + letter.point, 0) ,0);
             this.totalPoints += scoredPoints;
             console.log(`points: ${scoredPoints}`)
+            console.log(words);
+            var str = words.filter(w =>w.length > 1).reduce((acc, x) => acc + `${x.reduce((acc2, x2) => acc2 + x2.letter, "")}, `, "");
+            console.log(str)
+            return new GameInputError(`Found the following words:\n ${str}`);
         } else {
             this.boardManager.PlaceTilesInHand(squaresWithNewTiles.map(s => s.tile));
         }

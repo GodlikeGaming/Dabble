@@ -1,0 +1,13 @@
+- vis fejl besked / success beskd på skærmen 
+- lav en giv op knap
+- end screen
+  - share results with friends >_>
+
+
+- dobbelt klik for at fjerne tile (ikke stuck) fra boardet
+- Animation for bag and moving tiles from bag
+- Sound effects
+- lav posen og vis hvor mange brikker tilbage
+- Squares with special effects
+- fix size of squares, center and fit for mobile phone
+- se når der ikke er flere lovlige moves, og så træk resterende tiles point fra scoren

@@ -59,7 +59,7 @@ class TileManager {
             var insideSquare = this.boardManager.isPointInsideSquare(d.x, d.y);
             // is mouse inside square
             if (insideSquare) {
-                this.DeHighlight(d);
+                if (d.currentSquare !== insideSquare) this.DeHighlight(d);
                 if (insideSquare.tile && !insideSquare.tile.addedToBoard) {
                     d.currentSquare.AddTile(insideSquare.tile);
                     insideSquare.AddTile(d);
