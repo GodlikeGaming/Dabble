@@ -74,8 +74,11 @@ class TileManager {
                 // d.currentSquare.ClearTile();
                 // insideSquare.AddTile(d);
             } else if (d.currentSquare){
-                d.x = d.currentSquare.x+5;
-                d.y = d.currentSquare.y+5;
+                // tiles is dropped outside of gameboard
+                this.boardManager.PlaceTilesInHand([d]);
+                this.DeHighlight(d);
+                //d.x = d.currentSquare.x+5;
+                //d.y = d.currentSquare.y+5;
             }
          }
          var dragstarted = (d) => {

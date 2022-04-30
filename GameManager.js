@@ -64,6 +64,26 @@ class GameManager {
         return tilePrefabs
     }
 
+    EndGame() {
+        var handTiles = this.boardManager.GetHandTiles();
+        var minusPoints = handTiles.reduce((acc, x) => acc + x.point, 0)
+        console.log(`Final score: ${this.totalPoints - minusPoints}`)
+
+        var shareString = `Total points: ${this.totalPoints - minusPoints}\n`
+        var boardSquares = this.boardManager.GetBoardSquares();
+        for (let y = 0; y < this.boardManager.boardHeight; y++) {
+            for (let x= 0; x < this.boardManager.boardWidth; x++) {
+                if (boardSquares.filter(bs => bs.boardX === x && bs.boardY === y)[0].tile !== null) {
+                    shareString += '🟩'
+                } else {
+                    shareString += '⬛'
+                }
+            }
+            shareString += '\n';
+        }
+        console.log(shareString)
+    }
+
     TakeRandomTileFromBag() {
         var tileCount = this.tilesInBag.reduce((acc, x) => acc + x.count, 0);
         var randomTileIndex = this.random() * tileCount ;
@@ -90,6 +110,14 @@ class GameManager {
 
 
     draw() {
+        /*
+        d3.select("body")
+        .on('click', d => {
+            if (this.selectedTile !== null) {
+                this.boardManager.PlaceTilesInHand([d]);
+                window.tileManager.DeHighlight(d);
+            }
+        })*/
 
         this.totalPointsText = this.g
             .selectAll('.totalPointsText')
@@ -98,7 +126,7 @@ class GameManager {
                 enter
                     .append('text')
                     .attr('class', 'totalPointsText')
-                    .attr('x', 700 + 75)
+                    .attr('x', 775 + 75)
                     .attr('y', 0 + 50 + 10)
                     .text(d => `Points: ${d}`)
                     .style('text-anchor', 'middle')
@@ -152,6 +180,51 @@ class GameManager {
                         .attr('x', 800 + 75)
                         .attr('y', submitButtonY + 50 + 10)
                         .text("Submit")
+                        .style('text-anchor', 'middle')
+                        .style('fill', 'black')
+                        .attr('font-size', 30)
+                        .attr('pointer-events', 'none'),
+                )
+
+                this.concedeButton = this.g
+                .selectAll('.concede')
+                .data(data, d => d.id)
+                .join (enter => 
+                    enter
+                        .append('rect')
+                        .attr('class', 'concede')
+                        .attr('width', '15%')
+                        .attr('height', '10%')
+                        .attr('x', '800')
+                        .attr('y', 550)
+                       .attr('fill', 'white')
+                       .style('stroke-width', 2)
+                       .style('stroke', 'black')
+                       .style('cursor', 'pointer')
+                       .on('mouseover', (d) => 
+                       this.concedeButton.attr('fill', 'lightgreen')
+                       .transition()
+                       .duration(100)
+                       .attr('height', '11%')
+                       ) 
+                       .on('mouseout', (d) => 
+                       this.concedeButton.attr('fill', 'white')
+                       .transition()
+                       .duration(100)
+                       .attr('height', '10%')) 
+                        .on('click', (d) => {
+                            this.EndGame()})
+                    )
+                this.concedeText = this.g
+                .selectAll('.concedeText')
+                .data(data, d => d.id)
+                .join (enter => 
+                    enter
+                        .append('text')
+                        .attr('class', 'concedeText')
+                        .attr('x', 800 + 75)
+                        .attr('y', 550 + 50 + 10)
+                        .text("Concede")
                         .style('text-anchor', 'middle')
                         .style('fill', 'black')
                         .attr('font-size', 30)

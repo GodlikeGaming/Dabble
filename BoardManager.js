@@ -4,7 +4,7 @@ class BoardManager {
         this.tileWidth = 110;
         this.tileHeight = 110;
 
-        this.boardWidth = 8;
+        this.boardWidth = 7;
         this.boardHeight = 6;
         this.square_list = []
 
@@ -19,6 +19,12 @@ class BoardManager {
         for (let i = 0; i < 7; i++) {
             this.handList.push(new TileHolder(i*this.tileWidth,700));
         }
+    }
+    GetBoardSquares() {
+        return this.square_list;
+    }
+    GetHandTiles() {
+        return this.handList.map(th => th.tile).filter(t => t !== null);
     }
     AddTileToHand(tile) {
         this.handList.filter(x => x.tile === null)[0].AddTile(tile);
