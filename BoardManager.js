@@ -80,7 +80,7 @@ class BoardManager {
         var boardTileList = this.boardTileList;
         boardTileList.forEach((d,i) => d.id = i);
 
-        var percentage = 60
+        var percentage = window.percentage
         
         this.boardTileRects = g
            .selectAll('.square')
@@ -89,8 +89,8 @@ class BoardManager {
                enter => enter
                    .append('rect')
                    .attr('class', 'square')
-                   .attr('x', d => `${(28.5)/2 + (percentage*(d.boardX/(this.boardWidth-1)))}%`)
-                   .attr('y', d => `${percentage*(d.boardY/(this.boardHeight-1))}%`)
+                   .attr('x', d => `${(100-percentage - percentage/this.boardWidth)/2 + (percentage*(d.boardX/(this.boardWidth-1)))}%`)
+                   .attr('y', d => `${5+percentage*(d.boardY/(this.boardHeight-1))}%`)
                    .attr('width', `${percentage/this.boardWidth}%`)
                    .attr('height', `${percentage/this.boardWidth}%`)
                    .attr('fill', 'green')
@@ -111,8 +111,9 @@ class Tile {
     }
     AddPiece(piece) {
         this.piece = piece;
-        piece.x = this.x+5;
-        piece.y = this.y+5;
+        piece.x = this.x;
+        piece.y = this.y;
+        console.log(piece.x)
         piece.currentTile = this;
     }
     ClearTile() {

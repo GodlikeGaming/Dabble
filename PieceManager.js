@@ -14,7 +14,7 @@ class PieceManager {
     AddMorePieces(piecePrefabs) {
         piecePrefabs.forEach((d, i) => 
         {
-            var piece = new Piece(105*i, 600, d.letter, d.point, this.pieceId++)
+            var piece = new Piece(0*i, 600, d.letter, d.point, this.pieceId++)
             this.pieceList.push(piece);
             this.boardManager.AddPieceToHand(piece);
         });
@@ -40,8 +40,8 @@ class PieceManager {
             d.y = d3.event.y
             var insideTile = this.boardManager.isPointInsideTile(d.x, d.y);
             if (insideTile && !insideTile.piece) {
-                d.x = insideTile.x+5;
-                d.y = insideTile.y+5;
+                d.x = insideTile.x;
+                d.y = insideTile.y;
             }
          }
          var dragended = (d) => {
@@ -76,6 +76,8 @@ class PieceManager {
         var pieceWidth = 100;
         var pieceHeight = 100;
         
+        var percentage = window.percentage
+        
         this.pieces = g
            .selectAll('.piece')
            .data(pieceList, d => d.id)
@@ -83,9 +85,9 @@ class PieceManager {
                enter => enter
                    .append('rect')
                    .attr('class', 'piece')
-                   .attr('x', d => d.x)
+                   .attr('x', d => `${((d.x))}`)
                    .attr('y', d => d.y)
-                   .attr('width', '10%')
+                   .attr('width', '8.5%')
                    .attr('height', '10%')
                    .attr('fill', 'beige')
                    .style('stroke-width', 2)
@@ -101,8 +103,8 @@ class PieceManager {
                    )
                     ,
                    update => update
-                   .attr('x', d => d.x)
-                   .attr('y', d => d.y)
+                   .attr('x', d => `${((d.x))}%`)
+                   .attr('y', d => `${d.y}%`)
                    
            )
 
