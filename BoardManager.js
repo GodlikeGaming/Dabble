@@ -52,7 +52,7 @@ class BoardManager {
     }
 
     colorInvalidMove(tilestocolor){
-        this.squares 
+        this.boardTileRects 
             .filter(d => tilestocolor.some(t => t.id === d.id))
             .transition()
             .duration(200)

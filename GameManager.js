@@ -310,8 +310,8 @@ class GameManager {
     }
 
     UpdateBoard() {
-        var squares = this.boardManager.GetSquares();
-        var squaresWithNewTiles = squares.filter(s => s.tile && !s.tile.addedToBoard);
+        var tiles = this.boardManager.GetSquares();
+        var tilesWithNewPieces = tiles.filter(s => s.piece && !s.piece.addedToBoard);
         var response = this.FindWords();
         // updates number of words placed
         if (response.success)
@@ -324,7 +324,7 @@ class GameManager {
         }
         else
         {
-            this.boardManager.colorInvalidMove(squaresWithNewTiles)
+            this.boardManager.colorInvalidMove(tilesWithNewPieces)
         }
 
         //this.currentStatusMessage.msg = response.msg;
