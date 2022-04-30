@@ -137,7 +137,8 @@ class TileManager {
                    .style('text-anchor', 'middle')
                    .style('fill', 'black')
                    .attr('font-size', 50)
-                   .attr('pointer-events', 'none'),
+                   .attr('pointer-events', 'none')
+                   .style('font-family', 'interstateBold'),
                    update => update
                    .attr('x', d => d.x + tileWidth / 2)
                    .attr('y', d => d.y + tileHeight / 2 + 15)
@@ -156,7 +157,8 @@ class TileManager {
                    .style('text-anchor', 'middle')
                    .style('fill', 'black')
                    .attr('font-size', 20)
-                   .attr('pointer-events', 'none'),
+                   .attr('pointer-events', 'none')
+                   .style('font-family', 'interstateBold'),
                    update => update
                    .attr('x', d => d.x + tileWidth * 0.8)
                    .attr('y', d => d.y + tileHeight *0.9)
