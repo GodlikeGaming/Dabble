@@ -312,10 +312,12 @@ class GameManager {
     UpdateBoard() {
         var tiles = this.boardManager.GetSquares();
         var tilesWithNewPieces = tiles.filter(s => s.piece && !s.piece.addedToBoard);
+        var newPieces = tilesWithNewPieces.map(t => t.piece)
         var response = this.FindWords();
         // updates number of words placed
         if (response.success)
         {
+            window.pieceManager.colorValidMove(newPieces)
             this.numberOfMoves ++
             if (this.numberOfMoves === this.maxNumberOfMoves)
             {

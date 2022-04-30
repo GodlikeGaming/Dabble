@@ -7,6 +7,7 @@ class BoardManager {
         this.boardWidth = 7;
         this.boardHeight = 6;
         this.boardTileList = []
+        this.boardTileColor = '#A1CDA8'
 
         for (let x = 0; x < this.boardWidth; x++) {
             for (let y = 0; y < this.boardHeight; y++) {
@@ -59,19 +60,9 @@ class BoardManager {
             .attr('fill','red')
             .transition()
             .duration(500)
-            .attr('fill','green')
-        
-        
-        
-        
-        //this.currentStatusMessage.msg = response.msg;
-        //this.statusMsg.interrupt()
-        //this.statusMsg
-        //    .style('opacity', 1)
-        //    .transition()
-        //    .duration(5000)
-        //    .style('opacity', 0)
-    }
+            .attr('fill',this.boardTileColor)
+    }  
+
 
     draw(){
         var g = this.g;
@@ -93,7 +84,7 @@ class BoardManager {
                    .attr('y', d => d.y)
                    .attr('width', '11%')
                    .attr('height', '11%')
-                   .attr('fill', 'green')
+                   .attr('fill', this.boardTileColor)
                    .style('stroke-width', 2)
                    .style('stroke', 'black')
                    .on('click', (d) => window.gameManager.ClickTile(d)),
