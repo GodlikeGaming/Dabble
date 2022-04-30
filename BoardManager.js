@@ -107,7 +107,7 @@ class Tile {
         piece.currentTile = this;
     }
     ClearTile() {
-        this.piece.currentTile = null;
+        if (this.piece !== null) this.piece.currentTile = null;
         this.piece = null;
     }
 }
