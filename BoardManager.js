@@ -6,45 +6,44 @@ class BoardManager {
 
         this.boardWidth = 7;
         this.boardHeight = 6;
-        this.square_list = []
+        this.boardTileList = []
 
         for (let x = 0; x < this.boardWidth; x++) {
             for (let y = 0; y < this.boardHeight; y++) {
-                this.square_list.push(new Square(x,y,x*this.tileWidth,y*this.tileHeight));
+                this.boardTileList.push(new BoardTile(x,y,x*this.tileWidth,y*this.tileHeight));
             }
         }
 
-        this.handList = []
+        this.handTileList = []
 
         for (let i = 0; i < 7; i++) {
-            this.handList.push(new TileHolder(i*this.tileWidth,700));
+            this.handTileList.push(new Tile(i*this.tileWidth,700));
         }
     }
     GetBoardSquares() {
-        return this.square_list;
+        return this.boardTileList;
     }
-    GetHandTiles() {
-        return this.handList.map(th => th.tile).filter(t => t !== null);
+    GetHandPieces() {
+        return this.handTileList.map(th => th.piece).filter(t => t !== null);
     }
-    AddTileToHand(tile) {
-        this.handList.filter(x => x.tile === null)[0].AddTile(tile);
+    AddPieceToHand(piece) {
+        this.handTileList.filter(x => x.piece === null)[0].AddPiece(piece);
     }
     GetSquares(){
-        return this.square_list;
+        return this.boardTileList;
     }
-    PlaceTilesInHand(tiles){
-        console.log(tiles)
-        tiles.forEach(t => {
-            if (t.currentSquare !== null) 
+    PlacePiecesInHand(pieces){
+        pieces.forEach(t => {
+            if (t.currentTile !== null) 
             {
-                t.currentSquare.ClearTile();
+                t.currentTile.ClearTile();
             }
-            this.handList.filter(x => x.tile === null)[0].AddTile(t)
+            this.handTileList.filter(x => x.piece === null)[0].AddPiece(t)
         })
     }
 
-    isPointInsideSquare(x, y){
-        return this.square_list.concat(this.handList).filter(d => 
+    isPointInsideTile(x, y){
+        return this.boardTileList.concat(this.handTileList).filter(d => 
             x >= d.x- this.tileWidth / 2 && 
             x <= d.x+ this.tileWidth / 2 &&
             y >= d.y- this.tileHeight / 2 && 
@@ -56,14 +55,14 @@ class BoardManager {
         var g = this.g;
 
 
-        var squareList = this.square_list;
-        squareList.forEach((d,i) => d.id = i);
+        var boardTileList = this.boardTileList;
+        boardTileList.forEach((d,i) => d.id = i);
 
        
         
-        this.squares = g
+        this.boardTileRects = g
            .selectAll('.square')
-           .data(squareList, d => d.id)
+           .data(boardTileList, d => d.id)
            .join(
                enter => enter
                    .append('rect')
@@ -75,32 +74,32 @@ class BoardManager {
                    .attr('fill', 'green')
                    .style('stroke-width', 2)
                    .style('stroke', 'black')
-                   .on('click', (d) => window.gameManager.ClickSquare(d)),
+                   .on('click', (d) => window.gameManager.ClickTile(d)),
                    
            )
 
     }
 }
 
-class TileHolder {
+class Tile {
     constructor(x,y) {
         this.x = x;
         this.y = y;
-        this.tile = null;
+        this.piece = null;
     }
-    AddTile(tile) {
-        this.tile = tile;
-        tile.x = this.x+5;
-        tile.y = this.y+5;
-        tile.currentSquare = this;
+    AddPiece(piece) {
+        this.piece = piece;
+        piece.x = this.x+5;
+        piece.y = this.y+5;
+        piece.currentTile = this;
     }
     ClearTile() {
-        this.tile.currentSquare = null;
-        this.tile = null;
+        this.piece.currentTile = null;
+        this.piece = null;
     }
 }
 
-class Square extends TileHolder {
+class BoardTile extends Tile {
     constructor(boardX, boardY, x,y) {
         super(x,y)
         this.boardX = boardX;

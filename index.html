@@ -16,7 +16,7 @@
          }
       </style>
       <link rel="stylesheet" href="styling.css"> 
-      <script src = "TileManager.js"></script>
+      <script src = "PieceManager.js"></script>
       <script src = "BoardManager.js"></script>
       <script src = "GameManager.js"></script>
       <script src = "EnglishWords.js"></script>
@@ -47,14 +47,14 @@
         window.gameManager = gameManager;
 
         
-        var tileManager = new TileManager(g, boardManager, gameManager);
+        var pieceManager = new PieceManager(g, boardManager, gameManager);
 
-        window.tileManager = tileManager;
+        window.pieceManager = pieceManager;
          
 
          var ticked = () => {
              boardManager.draw();
-             tileManager.draw();
+             pieceManager.draw();
              gameManager.draw();
          }
          var simulation = d3

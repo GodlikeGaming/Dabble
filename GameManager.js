@@ -5,42 +5,42 @@ class GameManager {
         this.boardManager = boardManager;
         this.englishWords = englishWords;
         this.totalPoints = 0;
-        this.tilesInBagCount = 14;
+        this.pieceInBagCount = 14;
         // mouse controls
-        this.selectedTile = null;
+        this.selectedPiece = null;
         this.currentStatusMessage = {msg: "", id: 0};
         // word count variables
         this.maxNumberOfMoves = 7;
         this.numberOfMoves = 0;
 
-        this.tilesInBag = 
+        this.piecesInBag = 
         [
-            new TilePrefab('A', 1, 9),
-            new TilePrefab('B', 3, 2),
-            new TilePrefab('C', 3, 2),
-            new TilePrefab('D', 2, 4),
-            new TilePrefab('E', 1, 12),
-            new TilePrefab('F', 4, 2),
-            new TilePrefab('G', 2, 3),
-            new TilePrefab('H', 4, 2),
-            new TilePrefab('I', 1, 9),
-            new TilePrefab('J', 8, 1),
-            new TilePrefab('K', 5, 1),
-            new TilePrefab('L', 1, 4),
-            new TilePrefab('M', 3, 2),
-            new TilePrefab('N', 1, 6),
-            new TilePrefab('O', 1, 8),
-            new TilePrefab('P', 3, 2),
-            new TilePrefab('Q', 10, 1),
-            new TilePrefab('R', 1, 6),
-            new TilePrefab('S', 1, 4),
-            new TilePrefab('T', 1, 6),
-            new TilePrefab('U', 1, 4),
-            new TilePrefab('V', 4, 2),
-            new TilePrefab('W', 4, 2),
-            new TilePrefab('X', 8, 1),
-            new TilePrefab('Y', 4, 2),
-            new TilePrefab('Z', 10, 1),
+            new PiecePrefab('A', 1, 9),
+            new PiecePrefab('B', 3, 2),
+            new PiecePrefab('C', 3, 2),
+            new PiecePrefab('D', 2, 4),
+            new PiecePrefab('E', 1, 12),
+            new PiecePrefab('F', 4, 2),
+            new PiecePrefab('G', 2, 3),
+            new PiecePrefab('H', 4, 2),
+            new PiecePrefab('I', 1, 9),
+            new PiecePrefab('J', 8, 1),
+            new PiecePrefab('K', 5, 1),
+            new PiecePrefab('L', 1, 4),
+            new PiecePrefab('M', 3, 2),
+            new PiecePrefab('N', 1, 6),
+            new PiecePrefab('O', 1, 8),
+            new PiecePrefab('P', 3, 2),
+            new PiecePrefab('Q', 10, 1),
+            new PiecePrefab('R', 1, 6),
+            new PiecePrefab('S', 1, 4),
+            new PiecePrefab('T', 1, 6),
+            new PiecePrefab('U', 1, 4),
+            new PiecePrefab('V', 4, 2),
+            new PiecePrefab('W', 4, 2),
+            new PiecePrefab('X', 8, 1),
+            new PiecePrefab('Y', 4, 2),
+            new PiecePrefab('Z', 10, 1),
         ]
         // set seed by getting the current date and rounding to nearest day and then to ticks
         var today = new Date();
@@ -56,28 +56,28 @@ class GameManager {
         return x - Math.floor(x);
     }
 
-    CreateTilePrefabs(n) {
-        n = Math.min(n, this.tilesInBagCount)
+    CreatePiecePrefabs(n) {
+        n = Math.min(n, this.pieceInBagCount)
         var tilePrefabs = [];
         for (let i = 0; i < n; i++) {
             
-            tilePrefabs.push(this.TakeRandomTileFromBag());
+            tilePrefabs.push(this.TakeRandomPieceFromBag());
         }
-        this.tilesInBagCount -= n;
+        this.pieceInBagCount -= n;
         
         return tilePrefabs
     }
 
     EndGame() {
-        var handTiles = this.boardManager.GetHandTiles();
-        var minusPoints = handTiles.reduce((acc, x) => acc + x.point, 0)
+        var handPieces = this.boardManager.GetHandPieces();
+        var minusPoints = handPieces.reduce((acc, x) => acc + x.point, 0)
         console.log(`Final score: ${this.totalPoints - minusPoints}`)
 
         var shareString = `Total points: ${this.totalPoints - minusPoints}\n`
         var boardSquares = this.boardManager.GetBoardSquares();
         for (let y = 0; y < this.boardManager.boardHeight; y++) {
             for (let x= 0; x < this.boardManager.boardWidth; x++) {
-                if (boardSquares.filter(bs => bs.boardX === x && bs.boardY === y)[0].tile !== null) {
+                if (boardSquares.filter(bs => bs.boardX === x && bs.boardY === y)[0].piece !== null) {
                     shareString += '🟩'
                 } else {
                     shareString += '⬛'
@@ -88,28 +88,27 @@ class GameManager {
         console.log(shareString)
     }
 
-    TakeRandomTileFromBag() {
-        var tileCount = this.tilesInBag.reduce((acc, x) => acc + x.count, 0);
-        var randomTileIndex = this.random() * tileCount ;
-        console.log(randomTileIndex)
+    TakeRandomPieceFromBag() {
+        var pieceCount = this.piecesInBag.reduce((acc, x) => acc + x.count, 0);
+        var randomPieceIndex = this.random() * pieceCount ;
         
         var i = 0;
-        var currTileIndex = 0;
+        var currPieceIndex = 0;
         while (true) {
-            if (currTileIndex >= this.tilesInBag.length) return;
-            var tile = this.tilesInBag[currTileIndex++];
+            if (currPieceIndex >= this.piecesInBag.length) return;
+            var piece = this.piecesInBag[currPieceIndex++];
             
-            if (tile.count + i > randomTileIndex) {
+            if (piece.count + i > randomPieceIndex) {
                 // must be the right tile!!!
-                tile.count--; // reduce count
-                return tile;    
+                piece.count--; // reduce count
+                return piece;    
                 break; // stop iterating
             }
 
-            i += tile.count;
+            i += piece.count;
         }
 
-        return tile;
+        return piece;
     }
 
 
@@ -289,25 +288,24 @@ class GameManager {
 
     }
     
-    ClickTile(tile) {
-        if (tile.addedToBoard) return;
-        if (this.selectedTile !== null) {
+    ClickPiece(piece) {
+        if (piece.addedToBoard) return;
+        if (this.selectedPiece !== null) {
             // if a tile is selected
-            window.tileManager.DeHighlight(this.selectedTile);
+            window.pieceManager.DeHighlight(this.selectedPiece);
         } 
 
-        window.tileManager.Highlight(tile);
-        this.selectedTile = tile;
+        window.pieceManager.Highlight(piece);
+        this.selectedPiece = piece;
         
     }
 
-    ClickSquare(square) {
-        console.log(this.selectedTile);
-        if (this.selectedTile !== null) {
-            this.selectedTile.currentSquare.ClearTile();
-            square.AddTile(this.selectedTile);
-            window.tileManager.DeHighlight(this.selectedTile);
-            this.selectedTile = null;
+    ClickTile(tile) {
+        if (this.selectedPiece !== null) {
+            this.selectedPiece.currentTile.ClearTile();
+            tile.AddPiece(this.selectedPiece);
+            window.pieceManager.DeHighlight(this.selectedPiece);
+            this.selectedPiece = null;
         }
     }
 
@@ -335,78 +333,77 @@ class GameManager {
     }
 
     FindWords() {
-        var squares = this.boardManager.GetSquares();
-        var squaresWithNewTiles = squares.filter(s => s.tile && !s.tile.addedToBoard);
+        var tiles = this.boardManager.GetSquares();
+        var tilesWithNewPieces = tiles.filter(s => s.piece && !s.piece.addedToBoard);
 
         // check that there are newTiles 
-        if (squaresWithNewTiles.length === 0) 
+        if (tilesWithNewPieces.length === 0) 
         {
-            this.boardManager.PlaceTilesInHand(squaresWithNewTiles.map(s => s.tile));
+            this.boardManager.PlacePiecesInHand(tilesWithNewPieces.map(s => s.piece));
             return new GameSubmitResponse("No new tiles, can't submit");
         }
 
         // check that tiles are placed legally
         var horizontal = 
-            squaresWithNewTiles.every(t => t.y === squaresWithNewTiles[0].y);
+            tilesWithNewPieces.every(t => t.y === tilesWithNewPieces[0].y);
         var vertical = 
-            squaresWithNewTiles.every(t => t.x === squaresWithNewTiles[0].x);
+            tilesWithNewPieces.every(t => t.x === tilesWithNewPieces[0].x);
         if (!horizontal && !vertical) {
-            this.boardManager.PlaceTilesInHand(squaresWithNewTiles.map(s => s.tile));
+            this.boardManager.PlacePiecesInHand(tilesWithNewPieces.map(s => s.piece));
             return new GameSubmitResponse("Tiles are placed illegally");
         }
         
 
         // tiles are legally placed, check if all new words are legit 
-        var startSquare = squares.filter(s => s.tile && !s.tile.addedToBoard)[0];
+        var startSquare = tiles.filter(s => s.piece && !s.piece.addedToBoard)[0];
         
         var words = []
         if (horizontal) {
             console.log("horizontal search")
-            var horiWords = this.SearchForWordHorizontally(startSquare, squares, true);
+            var horiWords = this.SearchForWordHorizontally(startSquare, tiles, true);
             words = words.concat(horiWords);
         } 
         else if (vertical) {
             console.log("vertical search")
-            var vertWords = this.SearchForWordVertically(startSquare, squares, true);
+            var vertWords = this.SearchForWordVertically(startSquare, tiles, true);
             words = words.concat(vertWords);
         }
 
         // check that either the board is empty, or the at least one tile is placed contiguously to existng tile
-        var boardIsEmtpy = squares.filter(s => s.tile && s.tile.addedToBoard).length === 0;
+        var boardIsEmtpy = tiles.filter(s => s.piece && s.piece.addedToBoard).length === 0;
         if (!boardIsEmtpy) {
-            if (!words.some(word => word.some(tile => tile.addedToBoard))) {
-                this.boardManager.PlaceTilesInHand(squaresWithNewTiles.map(s => s.tile));
+            if (!words.some(word => word.some(piece => piece.addedToBoard))) {
+                this.boardManager.PlacePiecesInHand(tilesWithNewPieces.map(s => s.piece));
                 return new GameSubmitResponse("New tiles/words are not connected to other game tiles");
             }
         }
 
         // check that tiles are placed contiguously (and/or/with other existing tiles)
         if (horizontal) {
-            var min = Math.min.apply(Math, squaresWithNewTiles.map(function(o) { return o.boardX; }))
-            var max = Math.max.apply(Math, squaresWithNewTiles.map(function(o) { return o.boardX; }))
+            var min = Math.min.apply(Math, tilesWithNewPieces.map(function(o) { return o.boardX; }))
+            var max = Math.max.apply(Math, tilesWithNewPieces.map(function(o) { return o.boardX; }))
             for (let x = min; x < max; x++) {
-                var s = squares.filter(s => s.boardX === x && s.y === squaresWithNewTiles[0].y)[0];
-                if (s === null || s.tile === null) {
-                    this.boardManager.PlaceTilesInHand(squaresWithNewTiles.map(s => s.tile));
+                var s = tiles.filter(s => s.boardX === x && s.y === tilesWithNewPieces[0].y)[0];
+                if (s === null || s.piece === null) {
+                    this.boardManager.PlacePiecesInHand(tilesWithNewPieces.map(s => s.piece));
                     return new GameSubmitResponse("There is a gap between tiles placed on the board");
                 }
             }
         } else if (vertical) {
-            var min = Math.min.apply(Math, squaresWithNewTiles.map(function(o) { return o.boardY; }))
-            var max = Math.max.apply(Math, squaresWithNewTiles.map(function(o) { return o.boardY; }))
+            var min = Math.min.apply(Math, tilesWithNewPieces.map(function(o) { return o.boardY; }))
+            var max = Math.max.apply(Math, tilesWithNewPieces.map(function(o) { return o.boardY; }))
             console.log(`${min}, ${max}`)
             for (let y = min; y < max; y++) {
-                var s = squares.filter(s => s.boardY === y && s.x === squaresWithNewTiles[0].x)[0];
-                if (s === null || s.tile === null) {
-                    this.boardManager.PlaceTilesInHand(squaresWithNewTiles.map(s => s.tile));
+                var s = tiles.filter(s => s.boardY === y && s.x === tilesWithNewPieces[0].x)[0];
+                if (s === null || s.piece === null) {
+                    this.boardManager.PlacePiecesInHand(tilesWithNewPieces.map(s => s.piece));
                     return new GameSubmitResponse("There is a gap between tiles placed on the board");
                 }
             }
         }
         
         words.filter(w =>w.length > 1).forEach(foundWord => {
-            console.log(foundWord.map(t=>t.letter));
-            var word = this.DoesListOfTilesWriteWord(foundWord);
+            var word = this.DoesListOfPiecesWriteWord(foundWord);
             if (word) {
                 console.log(`Legal word found: ${foundWord.map(t=>t.letter)}`); 
                 
@@ -416,9 +413,10 @@ class GameManager {
             }
         });
 
-        if (words.filter(w =>w.length > 1).every(foundWord => this.DoesListOfTilesWriteWord(foundWord))) {
-            window.tileManager.AddMoreTiles(this.CreateTilePrefabs(squaresWithNewTiles.map(s => s.tile).filter(t => !t.addedToBoard).length));
-            squaresWithNewTiles.map(s => s.tile).forEach(t => t.addedToBoard = true);
+        if (words.filter(w =>w.length > 1).every(foundWord => this.DoesListOfPiecesWriteWord(foundWord))) {
+            window.pieceManager.AddMorePieces(this.CreatePiecePrefabs(tilesWithNewPieces.map(s => s.piece).filter(t => !t.addedToBoard).length));
+            
+            tilesWithNewPieces.map(s => s.piece).forEach(t => t.addedToBoard = true);
             var scoredPoints = words.filter(w => w.length > 1).reduce((allPoints, word) => allPoints + word.reduce((wordPoint, letter) => wordPoint + letter.point, 0) ,0);
             this.totalPoints += scoredPoints;
             console.log(`points: ${scoredPoints}`)
@@ -427,7 +425,7 @@ class GameManager {
             console.log(str)
             return new GameSubmitResponse(`Found words:\n ${str}`, true);
         } else {
-            this.boardManager.PlaceTilesInHand(squaresWithNewTiles.map(s => s.tile));
+            this.boardManager.PlacePiecesInHand(tilesWithNewPieces.map(s => s.piece));
             return new GameSubmitResponse(`Illegal word(s) placed!`)
         }
     }
@@ -435,13 +433,12 @@ class GameManager {
     SearchForWordHorizontally(startSquare, squares, recursive) {
         var foundWord = []
         var words = [foundWord]
-        console.log(startSquare.tile.letter)
         // check left
         for (let x = startSquare.boardX; x >= 0; x--) {
             var leftSquare = squares.filter(s => s.boardX === x && s.boardY === startSquare.boardY)[0];
-            if (leftSquare && leftSquare.tile) {
-                foundWord.unshift(leftSquare.tile);
-                if (recursive && !leftSquare.tile.addedToBoard) {
+            if (leftSquare && leftSquare.piece) {
+                foundWord.unshift(leftSquare.piece);
+                if (recursive && !leftSquare.piece.addedToBoard) {
                     var word = this.SearchForWordVertically(leftSquare, squares, false);
                     words.push(word[0])
                 }
@@ -452,9 +449,9 @@ class GameManager {
         // check right
         for (let x = startSquare.boardX+1; x < this.boardManager.boardWidth; x++) {
             var rightSquare = squares.filter(s => s.boardX === x && s.boardY === startSquare.boardY)[0];
-            if (rightSquare && rightSquare.tile) {
-               foundWord.push(rightSquare.tile);
-               if (recursive && !rightSquare.tile.addedToBoard) {
+            if (rightSquare && rightSquare.piece) {
+               foundWord.push(rightSquare.piece);
+               if (recursive && !rightSquare.piece.addedToBoard) {
                     var word = this.SearchForWordVertically(rightSquare, squares, false);
                     words.push(word[0])
                }
@@ -468,13 +465,11 @@ class GameManager {
     SearchForWordVertically(startSquare, squares, recursive) {
         var foundWord = []
         var words = [foundWord] 
-        console.log(startSquare.tile.letter)
         for (let y = startSquare.boardY; y >= 0; y--) {
             var leftSquare = squares.filter(s => s.boardY === y && s.boardX === startSquare.boardX)[0];
-            if (leftSquare && leftSquare.tile) {
-                //horizontalWord = leftSquare.tile.letter + horizontalWord;
-                foundWord.unshift(leftSquare.tile);
-                if (recursive && !leftSquare.tile.addedToBoard) {
+            if (leftSquare && leftSquare.piece) {
+                foundWord.unshift(leftSquare.piece);
+                if (recursive && !leftSquare.piece.addedToBoard) {
                     var word = this.SearchForWordHorizontally(leftSquare, squares, false);
                     words.push(word[0])
                 }
@@ -485,10 +480,10 @@ class GameManager {
         // check horizontally to the right
         for (let y = startSquare.boardY+1; y < this.boardManager.boardHeight; y++) {
             var rightSquare = squares.filter(s => s.boardY === y && s.boardX === startSquare.boardX)[0];
-            if (rightSquare && rightSquare.tile) {
+            if (rightSquare && rightSquare.piece) {
                 // horizontalWord = horizontalWord + rightSquare.tile.letter;
-                foundWord.push(rightSquare.tile);
-                if (recursive && !rightSquare.tile.addedToBoard) {
+                foundWord.push(rightSquare.piece);
+                if (recursive && !rightSquare.piece.addedToBoard) {
                     var word = this.SearchForWordHorizontally(rightSquare, squares, false);
                     words.push(word[0])
                 }
@@ -499,7 +494,7 @@ class GameManager {
         return words
     }
 
-    DoesListOfTilesWriteWord(list) {
+    DoesListOfPiecesWriteWord(list) {
         if (list.filter(t => t.isWildcard)[0]) { // list contains wildcard
             const alphabet = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
             var allPossibleWords = alphabet.map(l => list.map(t => t.isWildcard ? l : t.letter).reduce((acc,e) => acc+e, ""))
@@ -514,7 +509,7 @@ class GameManager {
     }
 }
 
-class TilePrefab{
+class PiecePrefab{
     constructor(letter, point, count) {
         this.letter = letter;
         this.point = point;
