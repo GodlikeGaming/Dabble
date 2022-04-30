@@ -173,7 +173,7 @@ class GameManager {
             //             .attr('font-size', 30)
             //     )
             
-            this.submitText = this.g
+            this.statusMsg = this.g
             .selectAll('.t')
             .data([this.currentStatusMessage], d => d.id)
             .join (enter => 
@@ -181,7 +181,7 @@ class GameManager {
                     .append('text')
                     .attr('class', 't')
                     .attr('x', 400 + 75)
-                    .attr('y', 200 + 50 + 10)
+                    .attr('y', 50 + 50 + 10)
                     .text(d => d.msg)
                     .style('text-anchor', 'middle')
                     .style('fill', 'white')
@@ -219,6 +219,13 @@ class GameManager {
         var word = "";
         var words = this.FindWords();
         this.currentStatusMessage.msg = words.msg;
+        this.statusMsg.interrupt()
+        this.statusMsg
+        .style('opacity', 1)
+        .transition()
+        .duration(5000)
+        .style('opacity', 0)
+
         console.log(words);
     }
 
@@ -296,11 +303,10 @@ class GameManager {
             console.log(foundWord.map(t=>t.letter));
             var word = this.DoesListOfTilesWriteWord(foundWord);
             if (word) {
-                
                 console.log(`Legal word found: ${foundWord.map(t=>t.letter)}`); 
                 
             } else {
-                this.boardManager.PlaceTilesInHand(squaresWithNewTiles.map(s => s.tile));
+                //this.boardManager.PlaceTilesInHand(squaresWithNewTiles.map(s => s.tile));
                 console.log(`Illegal word found: ${foundWord.map(t=>t.letter)}`); 
             }
         });
@@ -314,9 +320,10 @@ class GameManager {
             console.log(words);
             var str = words.filter(w =>w.length > 1).reduce((acc, x) => acc + `${x.reduce((acc2, x2) => acc2 + x2.letter, "")}, `, "");
             console.log(str)
-            return new GameInputError(`Found the following words:\n ${str}`);
+            return new GameInputError(`Found words:\n ${str}`);
         } else {
             this.boardManager.PlaceTilesInHand(squaresWithNewTiles.map(s => s.tile));
+            return new GameInputError(`Illegal word(s) placed!`)
         }
     }
 

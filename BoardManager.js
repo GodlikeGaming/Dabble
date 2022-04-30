@@ -27,8 +27,12 @@ class BoardManager {
         return this.square_list;
     }
     PlaceTilesInHand(tiles){
+        console.log(tiles)
         tiles.forEach(t => {
-            t.currentSquare.ClearTile();
+            if (t.currentSquare !== null) 
+            {
+                t.currentSquare.ClearTile();
+            }
             this.handList.filter(x => x.tile === null)[0].AddTile(t)
         })
     }

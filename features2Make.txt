@@ -1,4 +1,3 @@
-- vis fejl besked / success beskd på skærmen 
 - lav en giv op knap
 - end screen
   - share results with friends >_>
