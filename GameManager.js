@@ -10,8 +10,8 @@ class GameManager {
         this.selectedTile = null;
         this.currentStatusMessage = {msg: "", id: 0};
         // word count variables
-        this.maxNumberOfWords = 7;
-        this.currentNumberOfPlacedWords = 0;
+        this.maxNumberOfMoves = 7;
+        this.numberOfMoves = 0;
 
         this.tilesInBag = 
         [
@@ -122,23 +122,23 @@ class GameManager {
                 window.tileManager.DeHighlight(d);
             }
         })*/
-        this.wordCountText = this.g
-            .selectAll('.wordCountText')
-            .data([this.currentNumberOfPlacedWords])
+        this.movesCountText = this.g
+            .selectAll('.movesCountText')
+            .data([this.numberOfMoves])
             .join(enter => 
                 enter
                     .append('text')
-                    .attr('class', 'wordCountText')
-                    .attr('x', 775 + 120)
+                    .attr('class', 'movesCountText')
+                    .attr('x', 780)
                     .attr('y', 0 + 30)
-                    .text(d => `Word count: ${this.currentNumberOfPlacedWords} / ${this.maxNumberOfWords}`)
-                    .style('text-anchor', 'middle')
+                    .text(d => `Moves used: ${this.numberOfMoves} / ${this.maxNumberOfMoves}`)
                     .style('fill', 'black')
-                    .attr('font-size', 30)
+                    .style('font-family', 'interstateBold')
+                    .attr('font-size', 20)
                     .attr('pointer-events', 'none'),
                     
                     update => 
-                    update.text(d => `Word count: ${this.currentNumberOfPlacedWords} / ${this.maxNumberOfWords}`)
+                    update.text(d => `Moves used: ${this.numberOfMoves} / ${this.maxNumberOfMoves}`)
                 )
 
         this.totalPointsText = this.g
@@ -148,12 +148,12 @@ class GameManager {
                 enter
                     .append('text')
                     .attr('class', 'totalPointsText')
-                    .attr('x', 775 + 75)
+                    .attr('x', 780)
                     .attr('y', 0 + 50 + 10)
                     .text(d => `Points: ${d}`)
-                    .style('text-anchor', 'middle')
                     .style('fill', 'black')
-                    .attr('font-size', 30)
+                    .style('font-family', 'interstateBold')
+                    .attr('font-size', 20)
                     .attr('pointer-events', 'none'),
                     
                     update => 
@@ -204,6 +204,7 @@ class GameManager {
                         .text("Submit")
                         .style('text-anchor', 'middle')
                         .style('fill', 'black')
+                        .style('font-family', 'interstateBold')
                         .attr('font-size', 30)
                         .attr('pointer-events', 'none'),
                 )
@@ -249,6 +250,7 @@ class GameManager {
                         .text("Concede")
                         .style('text-anchor', 'middle')
                         .style('fill', 'black')
+                        .style('font-family', 'interstateBold')
                         .attr('font-size', 30)
                         .attr('pointer-events', 'none'),
                 )
@@ -314,8 +316,8 @@ class GameManager {
         // updates number of words placed
         if (response.success)
         {
-            this.currentNumberOfPlacedWords ++
-            if (this.currentNumberOfPlacedWords === this.maxNumberOfWords)
+            this.numberOfMoves ++
+            if (this.numberOfMoves === this.maxNumberOfMoves)
             {
                 this.EndGame()
             }
