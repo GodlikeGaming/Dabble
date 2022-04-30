@@ -5,7 +5,7 @@ class BoardManager {
         this.tileHeight = 110;
 
         this.boardWidth = 7;
-        this.boardHeight = 6;
+        this.boardHeight = 7;
         this.boardTileList = []
 
         for (let x = 0; x < this.boardWidth; x++) {
@@ -80,7 +80,7 @@ class BoardManager {
         var boardTileList = this.boardTileList;
         boardTileList.forEach((d,i) => d.id = i);
 
-       
+        var percentage = 60
         
         this.boardTileRects = g
            .selectAll('.square')
@@ -89,10 +89,10 @@ class BoardManager {
                enter => enter
                    .append('rect')
                    .attr('class', 'square')
-                   .attr('x', d => d.x)
-                   .attr('y', d => d.y)
-                   .attr('width', '11%')
-                   .attr('height', '11%')
+                   .attr('x', d => `${(28.5)/2 + (percentage*(d.boardX/(this.boardWidth-1)))}%`)
+                   .attr('y', d => `${percentage*(d.boardY/(this.boardHeight-1))}%`)
+                   .attr('width', `${percentage/this.boardWidth}%`)
+                   .attr('height', `${percentage/this.boardWidth}%`)
                    .attr('fill', 'green')
                    .style('stroke-width', 2)
                    .style('stroke', 'black')

@@ -26,17 +26,35 @@
    </head>
 
    <body>
-      <svg width = "1000" height = "1000"></svg>
       <script>
-          window.timeout
-         var svg = d3.select("svg"),
-         margin = 200, width = svg.attr("width") - margin,
-         height = svg.attr("height") - margin;
-         window.width = svg.attr('width')
-         window.height = svg.attr('height')
+         window.timeout
+         var header = d3.select('body').append('div')
+         header
+            .style("display", "block")
+            .style("margin", "auto")
+         
+         var title = header.append("h1")
+         
+         title
+         .text('Dabble')
+         .style('margin', '5px')
+         .style('font-size', '50px')
+         .style('text-align', 'center')
+         .style('font-family', 'interstateBold')
+
+
+         var svg = d3.select('body').append("svg").attr('width', "50%").attr('height', "800")
+         //margin = 200, 
+         //width = svg.attr("width") - margin,
+         //height = svg.attr("height") - margin;
+         //window.width = svg.attr('width')
+         //window.height = svg.attr('height')
+
+         svg.style("display", "block")
+            .style("margin", "auto")
          
 
-         var g = svg.append("g");
+      var g = svg.append("g");
         
         var boardManager = new BoardManager(g);
 
