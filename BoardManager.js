@@ -51,6 +51,28 @@ class BoardManager {
             )[0];
     }
 
+    colorInvalidMove(tilestocolor){
+        this.squares 
+            .filter(d => tilestocolor.some(t => t.id === d.id))
+            .transition()
+            .duration(200)
+            .attr('fill','red')
+            .transition()
+            .duration(500)
+            .attr('fill','green')
+        
+        
+        
+        
+        //this.currentStatusMessage.msg = response.msg;
+        //this.statusMsg.interrupt()
+        //this.statusMsg
+        //    .style('opacity', 1)
+        //    .transition()
+        //    .duration(5000)
+        //    .style('opacity', 0)
+    }
+
     draw(){
         var g = this.g;
 
