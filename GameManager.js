@@ -1,13 +1,17 @@
 class GameManager {
+    
     constructor(g, boardManager, englishWords) {
         this.g = g;
         this.boardManager = boardManager;
         this.englishWords = englishWords;
         this.totalPoints = 0;
         this.tilesInBagCount = 14;
-        // omuse controls
+        // mouse controls
         this.selectedTile = null;
         this.currentStatusMessage = {msg: "", id: 0};
+        // word count variables
+        this.maxNumberOfWords = 7;
+        this.currentNumberOfPlacedWords = 0;
 
         this.tilesInBag = 
         [
@@ -118,6 +122,24 @@ class GameManager {
                 window.tileManager.DeHighlight(d);
             }
         })*/
+        this.wordCountText = this.g
+            .selectAll('.wordCountText')
+            .data([this.currentNumberOfPlacedWords])
+            .join(enter => 
+                enter
+                    .append('text')
+                    .attr('class', 'wordCountText')
+                    .attr('x', 775 + 120)
+                    .attr('y', 0 + 30)
+                    .text(d => `Word count: ${this.currentNumberOfPlacedWords} / ${this.maxNumberOfWords}`)
+                    .style('text-anchor', 'middle')
+                    .style('fill', 'black')
+                    .attr('font-size', 30)
+                    .attr('pointer-events', 'none'),
+                    
+                    update => 
+                    update.text(d => `Word count: ${this.currentNumberOfPlacedWords} / ${this.maxNumberOfWords}`)
+                )
 
         this.totalPointsText = this.g
             .selectAll('.totalPointsText')
@@ -288,10 +310,18 @@ class GameManager {
     }
 
     UpdateBoard() {
-        var wordFound = false;
-        var word = "";
-        var words = this.FindWords();
-        this.currentStatusMessage.msg = words.msg;
+        var response = this.FindWords();
+        // updates number of words placed
+        if (response.success)
+        {
+            this.currentNumberOfPlacedWords ++
+            if (this.currentNumberOfPlacedWords === this.maxNumberOfWords)
+            {
+                this.EndGame()
+            }
+        }
+
+        this.currentStatusMessage.msg = response.msg;
         this.statusMsg.interrupt()
         this.statusMsg
         .style('opacity', 1)
@@ -299,7 +329,7 @@ class GameManager {
         .duration(5000)
         .style('opacity', 0)
 
-        console.log(words);
+        console.log(response);
     }
 
     FindWords() {
@@ -310,7 +340,7 @@ class GameManager {
         if (squaresWithNewTiles.length === 0) 
         {
             this.boardManager.PlaceTilesInHand(squaresWithNewTiles.map(s => s.tile));
-            return new GameInputError("No new tiles, can't submit");
+            return new GameSubmitResponse("No new tiles, can't submit");
         }
 
         // check that tiles are placed legally
@@ -320,7 +350,7 @@ class GameManager {
             squaresWithNewTiles.every(t => t.x === squaresWithNewTiles[0].x);
         if (!horizontal && !vertical) {
             this.boardManager.PlaceTilesInHand(squaresWithNewTiles.map(s => s.tile));
-            return new GameInputError("Tiles are placed illegally");
+            return new GameSubmitResponse("Tiles are placed illegally");
         }
         
 
@@ -344,7 +374,7 @@ class GameManager {
         if (!boardIsEmtpy) {
             if (!words.some(word => word.some(tile => tile.addedToBoard))) {
                 this.boardManager.PlaceTilesInHand(squaresWithNewTiles.map(s => s.tile));
-                return new GameInputError("New tiles/words are not connected to other game tiles");
+                return new GameSubmitResponse("New tiles/words are not connected to other game tiles");
             }
         }
 
@@ -356,7 +386,7 @@ class GameManager {
                 var s = squares.filter(s => s.boardX === x && s.y === squaresWithNewTiles[0].y)[0];
                 if (s === null || s.tile === null) {
                     this.boardManager.PlaceTilesInHand(squaresWithNewTiles.map(s => s.tile));
-                    return new GameInputError("There is a gap between tiles placed on the board");
+                    return new GameSubmitResponse("There is a gap between tiles placed on the board");
                 }
             }
         } else if (vertical) {
@@ -367,7 +397,7 @@ class GameManager {
                 var s = squares.filter(s => s.boardY === y && s.x === squaresWithNewTiles[0].x)[0];
                 if (s === null || s.tile === null) {
                     this.boardManager.PlaceTilesInHand(squaresWithNewTiles.map(s => s.tile));
-                    return new GameInputError("There is a gap between tiles placed on the board");
+                    return new GameSubmitResponse("There is a gap between tiles placed on the board");
                 }
             }
         }
@@ -393,10 +423,10 @@ class GameManager {
             console.log(words);
             var str = words.filter(w =>w.length > 1).reduce((acc, x) => acc + `${x.reduce((acc2, x2) => acc2 + x2.letter, "")}, `, "");
             console.log(str)
-            return new GameInputError(`Found words:\n ${str}`);
+            return new GameSubmitResponse(`Found words:\n ${str}`, true);
         } else {
             this.boardManager.PlaceTilesInHand(squaresWithNewTiles.map(s => s.tile));
-            return new GameInputError(`Illegal word(s) placed!`)
+            return new GameSubmitResponse(`Illegal word(s) placed!`)
         }
     }
 
@@ -490,8 +520,10 @@ class TilePrefab{
     }
 }
 
-class GameInputError{
-    constructor(msg) {
+class GameSubmitResponse{
+    constructor(msg, success=false) {
+
         this.msg = msg;
+        this.success = success;
     }
 }
