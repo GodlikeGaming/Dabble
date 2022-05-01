@@ -129,8 +129,8 @@ class GameManager {
                 enter
                     .append('text')
                     .attr('class', 'movesCountText')
-                    .attr('x', 780)
-                    .attr('y', 0 + 30)
+                    .attr('x', `${ window.width * 0.1}`)
+                    .attr('y', '4%')
                     .text(d => `Moves used: ${this.numberOfMoves} / ${this.maxNumberOfMoves}`)
                     .style('fill', 'black')
                     .style('font-family', 'interstateBold')
@@ -148,8 +148,9 @@ class GameManager {
                 enter
                     .append('text')
                     .attr('class', 'totalPointsText')
-                    .attr('x', 780)
-                    .attr('y', 0 + 60)
+                    .attr('x', `${0.9* window.width }`)
+                    .attr('y', '4%')
+                    .style('text-anchor', 'end')
                     .text(d => `Points: ${d}`)
                     .style('fill', 'black')
                     .style('font-family', 'interstateBold')
@@ -180,14 +181,14 @@ class GameManager {
                 )
 
         // button koordinates
-        var concedeButtonX = 800
-        var concedeButtonY = 400
+        var concedeButtonX = '12.5%'
+        var concedeButtonY = `${window.width*1}`
 
-        var shuffleButtonX = 800;
-        var shuffleButtonY = 550
+        var shuffleButtonX = '43.75%';
+        var shuffleButtonY = `${window.width*1}`
         
-        var submitButtonX = 800;
-        var submitButtonY = 700;
+        var submitButtonX = '75%';
+        var submitButtonY = `${window.width*1}`
 
         // button implementation
         var data = [{id: 0}]
@@ -198,8 +199,8 @@ class GameManager {
                 enter
                     .append('rect')
                     .attr('class', 'shuffle')
-                    .attr('width', '15%')
-                    .attr('height', '10%')
+                    .attr('width', '12.5%')
+                    .attr('height', '5%')
                     .attr('x', shuffleButtonX)
                     .attr('y', shuffleButtonY)
                    .attr('fill', 'white')
@@ -208,15 +209,16 @@ class GameManager {
                    .style('cursor', 'pointer')
                    .on('mouseover', (d) => 
                    this.shuffleButton.attr('fill', 'lightgreen')
-                   .transition()
-                   .duration(100)
-                   .attr('height', '11%')
+                   //.transition()
+                   //.duration(100)
+                   //.attr('height', '11%')
                    ) 
                    .on('mouseout', (d) => 
                    this.shuffleButton.attr('fill', 'white')
-                   .transition()
-                   .duration(100)
-                   .attr('height', '10%')) 
+                   //.transition()
+                   //.duration(100)
+                  // .attr('height', '10%')
+                  ) 
                     .on('click', (d) => {
                         this.ShufflePieces()})
                 )
@@ -228,10 +230,10 @@ class GameManager {
                     enter
                         .append('text')
                         .attr('class', 'shuffleText')
-                        .attr('x', shuffleButtonX + 75)
-                        .attr('y', shuffleButtonY + 50 + 10)
+                        .attr('x', shuffleButtonX)
+                        .attr('y', shuffleButtonY)
                         .text("Shuffle")
-                        .style('text-anchor', 'middle')
+                        //.style('text-anchor', 'start')
                         .style('fill', 'black')
                         .style('font-family', 'interstateBold')
                         .attr('font-size', 30)
@@ -248,8 +250,8 @@ class GameManager {
                 enter
                     .append('rect')
                     .attr('class', 'submit')
-                    .attr('width', '15%')
-                    .attr('height', '10%')
+                    .attr('width', '12.5%')
+                    .attr('height', '5%')
                     .attr('x', submitButtonX)
                     .attr('y', submitButtonY)
                    .attr('fill', 'white')
@@ -258,15 +260,12 @@ class GameManager {
                    .style('cursor', 'pointer')
                    .on('mouseover', (d) => 
                    this.submitButton.attr('fill', 'lightgreen')
-                   .transition()
-                   .duration(100)
-                   .attr('height', '11%')
+ 
                    ) 
                    .on('mouseout', (d) => 
                    this.submitButton.attr('fill', 'white')
-                   .transition()
-                   .duration(100)
-                   .attr('height', '10%')) 
+
+                    )                   
                     .on('click', (d) => {
                         this.UpdateBoard()})
                 )
@@ -278,10 +277,10 @@ class GameManager {
                     enter
                         .append('text')
                         .attr('class', 'submitText')
-                        .attr('x', submitButtonX + 75)
-                        .attr('y', submitButtonY + 50 + 10)
+                        .attr('x', submitButtonX)
+                        .attr('y', shuffleButtonY)
                         .text("Submit")
-                        .style('text-anchor', 'middle')
+                        //.style('text-anchor', 'middle')
                         .style('fill', 'black')
                         .style('font-family', 'interstateBold')
                         .attr('font-size', 30)
@@ -295,8 +294,8 @@ class GameManager {
                     enter
                         .append('rect')
                         .attr('class', 'concede')
-                        .attr('width', '15%')
-                        .attr('height', '10%')
+                        .attr('width', '12.5%')
+                        .attr('height', '5%')
                         .attr('x', concedeButtonX)
                         .attr('y', concedeButtonY)
                        .attr('fill', 'white')
@@ -305,15 +304,12 @@ class GameManager {
                        .style('cursor', 'pointer')
                        .on('mouseover', (d) => 
                        this.concedeButton.attr('fill', 'lightgreen')
-                       .transition()
-                       .duration(100)
-                       .attr('height', '11%')
+       
                        ) 
                        .on('mouseout', (d) => 
                        this.concedeButton.attr('fill', 'white')
-                       .transition()
-                       .duration(100)
-                       .attr('height', '10%')) 
+                     
+                       ) 
                         .on('click', (d) => {
                             this.EndGame()})
                     )
@@ -324,10 +320,10 @@ class GameManager {
                     enter
                         .append('text')
                         .attr('class', 'concedeText')
-                        .attr('x', concedeButtonX + 75)
-                        .attr('y', concedeButtonY + 50 + 10)
+                        .attr('x', concedeButtonX)
+                        .attr('y', shuffleButtonY)
                         .text("Concede")
-                        .style('text-anchor', 'middle')
+                        //.style('text-anchor', 'middle')
                         .style('fill', 'black')
                         .style('font-family', 'interstateBold')
                         .attr('font-size', 30)
