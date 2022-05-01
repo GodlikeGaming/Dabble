@@ -7,6 +7,7 @@ class PieceManager {
         this.pieceId = 0;
         this.pieceList = []
         this.pieceColor = 'beige'
+        this.addedToBoardColor = '#ffe4c4'
         
         this.AddMorePieces(this.gameManager.CreatePiecePrefabs(7))
 
@@ -41,7 +42,7 @@ class PieceManager {
             .attr('fill','green')
             .transition()
             .duration(500)
-            .attr('fill',this.pieceColor)
+            .attr('fill',d => d.addedToBoard ? this.addedToBoardColor : this.pieceColor)
     }
 
     draw(){
@@ -102,7 +103,7 @@ class PieceManager {
                    .attr('y', d => d.y + margin)
                    .attr('width', this.boardManager.tileHeight * factor)
                    .attr('height', this.boardManager.tileWidth * factor)
-                   .attr('fill', 'beige')
+                   .attr('fill', d => d.addedToBoard ? this.addedToBoardColor : this.pieceColor)
                    .style('stroke-width', '0.15%')
                    .style('stroke', 'black')
                    .attr("rx", '.75%')

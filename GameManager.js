@@ -6,7 +6,7 @@ class GameManager {
         this.englishWords = englishWords;
         this.totalPoints = 0;
         //this.numberOfPiecesLeftInBag = 14 - 7;
-        this.maxNumberOfPieces = 14;
+        this.maxNumberOfPieces = 21;
         // mouse controls
         this.selectedPiece = null;
         this.currentStatusMessage = {msg: "", id: 0};
