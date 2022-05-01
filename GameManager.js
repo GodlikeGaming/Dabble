@@ -128,7 +128,7 @@ class GameManager {
                 enter
                     .append('text')
                     .attr('class', 'movesCountText')
-                    .attr('x', '15.6%')
+                    .attr('x', `${24.8}%`)
                     .attr('y', '4%')
                     .text(d => `Moves used: ${this.numberOfMoves} / ${this.maxNumberOfMoves}`)
                     .style('fill', 'black')
@@ -147,7 +147,7 @@ class GameManager {
                 enter
                     .append('text')
                     .attr('class', 'totalPointsText')
-                    .attr('x', '84.5%')
+                    .attr('x', `${75.2}%`)
                     .attr('y', '4%')
                     .style('text-anchor', 'end')
                     .text(d => `Points: ${d}`)

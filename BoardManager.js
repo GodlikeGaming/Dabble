@@ -1,23 +1,28 @@
 class BoardManager {
     constructor(g) {
         this.g = g;
-        this.tileWidth = 110;
-        this.tileHeight = 110;
+        
+        this.boardWidth = 9;
+        this.boardHeight = 9;
+        // configure tile width and height
+        var factor = 0.5
+        this.tileWidth = factor* window.width / this.boardWidth ;
+        this.tileHeight = factor*window.height / this.boardHeight;
+        var offset = (1 - factor)/2 * window.width
 
-        this.boardWidth = 7;
-        this.boardHeight = 7;
         this.boardTileList = []
 
         for (let x = 0; x < this.boardWidth; x++) {
             for (let y = 0; y < this.boardHeight; y++) {
-                this.boardTileList.push(new BoardTile(x,y,x*this.tileWidth,y*this.tileHeight));
+                this.boardTileList.push(new BoardTile(x,y,offset + x*this.tileWidth,50+y*this.tileHeight));
             }
         }
 
         this.handTileList = []
 
+        var handTileOffset = (this.tileWidth * this.boardWidth)/7;
         for (let i = 0; i < 7; i++) {
-            this.handTileList.push(new Tile(i*this.tileWidth,700));
+            this.handTileList.push(new Tile(i*handTileOffset+offset,(factor + 0.075)*window.height));
         }
     }
     GetBoardSquares() {
@@ -89,10 +94,10 @@ class BoardManager {
                enter => enter
                    .append('rect')
                    .attr('class', 'square')
-                   .attr('x', d => `${(100-percentage - percentage/this.boardWidth)/2 + (percentage*(d.boardX/(this.boardWidth-1)))}%`)
-                   .attr('y', d => `${5+percentage*(d.boardY/(this.boardHeight-1))}%`)
-                   .attr('width', `${percentage/this.boardWidth}%`)
-                   .attr('height', `${percentage/this.boardWidth}%`)
+                   .attr('x', d => d.x)//`${(100-percentage - percentage/this.boardWidth)/2 + (percentage*(d.boardX/(this.boardWidth-1)))}%`)
+                   .attr('y', d => d.y)//`${5+percentage*(d.boardY/(this.boardHeight-1))}%`)
+                   .attr('width', this.tileWidth)//`${percentage/this.boardWidth}%`)
+                   .attr('height', this.tileHeight)
                    .attr('fill', 'green')
                    .style('stroke-width', 2)
                    .style('stroke', 'black')
@@ -113,7 +118,6 @@ class Tile {
         this.piece = piece;
         piece.x = this.x;
         piece.y = this.y;
-        console.log(piece.x)
         piece.currentTile = this;
     }
     ClearTile() {

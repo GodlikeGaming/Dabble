@@ -73,10 +73,10 @@ class PieceManager {
 
         var pieceList = this.pieceList;
 
-        var pieceWidth = 100;
-        var pieceHeight = 100;
+        var factor = 0.9;
+        var pieceWidth = this.boardManager.tileWidth * factor;
+        var pieceHeight = this.boardManager.tileHeight * factor*factor;
         
-        var percentage = window.percentage
         
         this.pieces = g
            .selectAll('.piece')
@@ -87,8 +87,8 @@ class PieceManager {
                    .attr('class', 'piece')
                    .attr('x', d => `${((d.x))}`)
                    .attr('y', d => d.y)
-                   .attr('width', '8.5%')
-                   .attr('height', '10%')
+                   .attr('width', this.boardManager.tileHeight * factor)
+                   .attr('height', this.boardManager.tileWidth * factor)
                    .attr('fill', 'beige')
                    .style('stroke-width', 2)
                    .style('stroke', 'black')
@@ -103,8 +103,8 @@ class PieceManager {
                    )
                     ,
                    update => update
-                   .attr('x', d => `${((d.x))}%`)
-                   .attr('y', d => `${d.y}%`)
+                   .attr('x', d => `${((d.x))}`)
+                   .attr('y', d => `${d.y}`)
                    
            )
 
@@ -116,16 +116,16 @@ class PieceManager {
                    .append('text')
                    .attr('class', 'pieceLetterText')
                    .attr('x', d => d.x + pieceWidth / 2)
-                   .attr('y', d => d.y + pieceHeight / 2 + 15)
+                   .attr('y', d => d.y + pieceHeight / 2)
                    .text(d => d.letter)
                    .style('text-anchor', 'middle')
                    .style('fill', 'black')
-                   .attr('font-size', 50)
+                   .attr('font-size', 30)
                    .attr('pointer-events', 'none')
                    .style('font-family', 'interstateBold'),
                    update => update
                    .attr('x', d => d.x + pieceWidth / 2)
-                   .attr('y', d => d.y + pieceHeight / 2 + 15)
+                   .attr('y', d => d.y + pieceHeight * 0.75)
            )
 
         this.piecePointTexts = g
@@ -136,16 +136,16 @@ class PieceManager {
                    .append('text')
                    .attr('class', 'piecePointText')
                    .attr('x', d => d.x + pieceWidth * 0.8)
-                   .attr('y', d => d.y + pieceHeight *0.9)
+                   .attr('y', d => d.y + pieceHeight *0.8)
                    .text(d => !d.isWildcard ? d.point : '') 
                    .style('text-anchor', 'middle')
                    .style('fill', 'black')
-                   .attr('font-size', 20)
+                   .attr('font-size', 15)
                    .attr('pointer-events', 'none')
                    .style('font-family', 'interstateBold'),
                    update => update
-                   .attr('x', d => d.x + pieceWidth * 0.8)
-                   .attr('y', d => d.y + pieceHeight *0.9)
+                   .attr('x', d => d.x + pieceWidth * 0.85)
+                   .attr('y', d => d.y + pieceHeight *1)
                    
                    
            )

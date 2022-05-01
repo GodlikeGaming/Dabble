@@ -27,7 +27,7 @@
 
    <body>
       <script>
-         window.percentage = 60
+         window.percentage = 80
          var header = d3.select('body').append('div')
          header
             .style("display", "block")
@@ -36,19 +36,19 @@
          var title = header.append("h1")
          
          title
-         .text('Fabble')
+         .text('Dabble')
          .style('margin', '5px')
          .style('font-size', '50px')
          .style('text-align', 'center')
          .style('font-family', 'interstateBold')
 
 
-         var svg = d3.select('body').append("svg").attr('width', "80%").attr('height', "800")
+         var svg = d3.select('body').append("svg").attr('width', "1000").attr('height', "1000")
          //margin = 200, 
          //width = svg.attr("width") - margin,
          //height = svg.attr("height") - margin;
-         //window.width = svg.attr('width')
-         //window.height = svg.attr('height')
+         window.width = svg.attr('width')
+         window.height = svg.attr('height')
 
          svg.style("display", "block")
             .style("margin", "auto")
