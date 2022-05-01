@@ -168,8 +168,9 @@ class GameManager {
                 enter
                     .append('text')
                     .attr('class', 'maxNumberOfPiecesText')
-                    .attr('x', 780)
-                    .attr('y', 0 + 90)
+                    .attr('x', `${0.50* window.width }`)
+                    .attr('y', '4%')
+                    .style('text-anchor', 'middle')
                     .text(d => `Pieces left in bag: ${d}`)
                     .style('fill', 'black')
                     .style('font-family', 'interstateBold')
