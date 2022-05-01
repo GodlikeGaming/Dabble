@@ -15,7 +15,7 @@ class PieceManager {
     AddMorePieces(piecePrefabs) {
         piecePrefabs.forEach((d, i) => 
         {
-            var piece = new Piece(105*i, 600, d.letter, d.point, this.pieceId++)
+            var piece = new Piece(0*i, 600, d.letter, d.point, this.pieceId++)
             this.pieceList.push(piece);
             this.boardManager.AddPieceToHand(piece);
         });
@@ -52,8 +52,8 @@ class PieceManager {
             d.y = d3.event.y
             var insideTile = this.boardManager.isPointInsideTile(d.x, d.y);
             if (insideTile && !insideTile.piece) {
-                d.x = insideTile.x+5;
-                d.y = insideTile.y+5;
+                d.x = insideTile.x;
+                d.y = insideTile.y;
             }
          }
          var dragended = (d) => {
@@ -85,8 +85,11 @@ class PieceManager {
 
         var pieceList = this.pieceList;
 
-        var pieceWidth = 100;
-        var pieceHeight = 100;
+        var factor = 0.9;
+        var pieceWidth = this.boardManager.tileWidth * factor;
+        var pieceHeight = this.boardManager.tileHeight * factor*factor;
+        
+        var margin = this.boardManager.tileHeight*0.05
         
         this.pieces = g
            .selectAll('.piece')
@@ -95,14 +98,14 @@ class PieceManager {
                enter => enter
                    .append('rect')
                    .attr('class', 'piece')
-                   .attr('x', d => d.x)
-                   .attr('y', d => d.y)
-                   .attr('width', '10%')
-                   .attr('height', '10%')
-                   .attr('fill', this.pieceColor)
-                   .style('stroke-width', 2)
+                   .attr('x', d => d.x + margin)
+                   .attr('y', d => d.y + margin)
+                   .attr('width', this.boardManager.tileHeight * factor)
+                   .attr('height', this.boardManager.tileWidth * factor)
+                   .attr('fill', 'beige')
+                   .style('stroke-width', '0.15%')
                    .style('stroke', 'black')
-                   .attr("rx", 10)
+                   .attr("rx", '.75%')
                    .style('cursor', 'pointer')
                    .on('click', (d) => {window.gameManager.ClickPiece(d)})
                    .call(
@@ -113,8 +116,8 @@ class PieceManager {
                    )
                     ,
                    update => update
-                   .attr('x', d => d.x)
-                   .attr('y', d => d.y)
+                   .attr('x', d => d.x + margin)
+                   .attr('y', d => d.y + margin)
                    
            )
 
@@ -126,16 +129,16 @@ class PieceManager {
                    .append('text')
                    .attr('class', 'pieceLetterText')
                    .attr('x', d => d.x + pieceWidth / 2)
-                   .attr('y', d => d.y + pieceHeight / 2 + 15)
+                   .attr('y', d => d.y + pieceHeight / 2)
                    .text(d => d.letter)
                    .style('text-anchor', 'middle')
                    .style('fill', 'black')
-                   .attr('font-size', 50)
+                   .attr('font-size', 30)
                    .attr('pointer-events', 'none')
                    .style('font-family', 'interstateBold'),
                    update => update
-                   .attr('x', d => d.x + pieceWidth / 2)
-                   .attr('y', d => d.y + pieceHeight / 2 + 15)
+                   .attr('x', d => d.x + pieceWidth *0.55)
+                   .attr('y', d => d.y + pieceHeight * 0.85 )
            )
 
         this.piecePointTexts = g
@@ -146,16 +149,16 @@ class PieceManager {
                    .append('text')
                    .attr('class', 'piecePointText')
                    .attr('x', d => d.x + pieceWidth * 0.8)
-                   .attr('y', d => d.y + pieceHeight *0.9)
+                   .attr('y', d => d.y + pieceHeight *0.8)
                    .text(d => !d.isWildcard ? d.point : '') 
                    .style('text-anchor', 'middle')
                    .style('fill', 'black')
-                   .attr('font-size', 20)
+                   .attr('font-size', 12)
                    .attr('pointer-events', 'none')
                    .style('font-family', 'interstateBold'),
                    update => update
-                   .attr('x', d => d.x + pieceWidth * 0.8)
-                   .attr('y', d => d.y + pieceHeight *0.9)
+                   .attr('x', d => d.x + pieceWidth * 0.85)
+                   .attr('y', d => d.y + pieceHeight *1.05)
                    
                    
            )
