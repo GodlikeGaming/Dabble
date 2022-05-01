@@ -387,15 +387,21 @@ class GameManager {
         else
         {
             this.boardManager.colorInvalidMove(tilesWithNewPieces)
+            this.currentStatusMessage.msg = response.msg;
+            if (this.currentStatusMessage.msg === "Word is not included in list")
+            {
+                this.statusMsg.interrupt()
+                this.statusMsg
+                .style('opacity', 1)
+                .style('fill','white')
+                .style('paint-order', 'stroke')
+                .style('stroke-width', '5px')
+                .style('stroke','black')
+                .transition()
+                .duration(5000)
+                .style('opacity', 0)
+            }
         }
-
-        //this.currentStatusMessage.msg = response.msg;
-        //this.statusMsg.interrupt()
-        //this.statusMsg
-        //.style('opacity', 1)
-        //.transition()
-        //.duration(5000)
-        //.style('opacity', 0)
 
         console.log(response);
     }
@@ -505,7 +511,7 @@ class GameManager {
             return new GameSubmitResponse(`Found words:\n ${str}`, true);
         } else {
             this.boardManager.PlacePiecesInHand(tilesWithNewPieces.map(s => s.piece));
-            return new GameSubmitResponse(`Illegal word(s) placed!`)
+            return new GameSubmitResponse(`Word is not included in list`)
         }
     }
 
