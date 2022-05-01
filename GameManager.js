@@ -128,7 +128,7 @@ class GameManager {
                 enter
                     .append('text')
                     .attr('class', 'movesCountText')
-                    .attr('x', `${24.8}%`)
+                    .attr('x', `${ window.width * 0.1}`)
                     .attr('y', '4%')
                     .text(d => `Moves used: ${this.numberOfMoves} / ${this.maxNumberOfMoves}`)
                     .style('fill', 'black')
@@ -147,7 +147,7 @@ class GameManager {
                 enter
                     .append('text')
                     .attr('class', 'totalPointsText')
-                    .attr('x', `${75.2}%`)
+                    .attr('x', `${0.9* window.width }`)
                     .attr('y', '4%')
                     .style('text-anchor', 'end')
                     .text(d => `Points: ${d}`)
@@ -161,14 +161,14 @@ class GameManager {
                 )
 
         // button koordinates
-        var concedeButtonX = '25%'
-        var concedeButtonY = `${window.factor*130}%`
+        var concedeButtonX = '12.5%'
+        var concedeButtonY = `${window.width*1}`
 
         var shuffleButtonX = '43.75%';
-        var shuffleButtonY = `${window.factor*130}%`
+        var shuffleButtonY = `${window.width*1}`
         
-        var submitButtonX = '62.5%';
-        var submitButtonY = `${window.factor*130}%`
+        var submitButtonX = '75%';
+        var submitButtonY = `${window.width*1}`
 
         // button implementation
         var data = [{id: 0}]
@@ -211,7 +211,7 @@ class GameManager {
                         .append('text')
                         .attr('class', 'shuffleText')
                         .attr('x', shuffleButtonX)
-                        .attr('y', '68.5%')
+                        .attr('y', shuffleButtonY)
                         .text("Shuffle")
                         //.style('text-anchor', 'start')
                         .style('fill', 'black')
@@ -258,7 +258,7 @@ class GameManager {
                         .append('text')
                         .attr('class', 'submitText')
                         .attr('x', submitButtonX)
-                        .attr('y', '68.5%')
+                        .attr('y', shuffleButtonY)
                         .text("Submit")
                         //.style('text-anchor', 'middle')
                         .style('fill', 'black')
@@ -301,7 +301,7 @@ class GameManager {
                         .append('text')
                         .attr('class', 'concedeText')
                         .attr('x', concedeButtonX)
-                        .attr('y', '68.5%')
+                        .attr('y', shuffleButtonY)
                         .text("Concede")
                         //.style('text-anchor', 'middle')
                         .style('fill', 'black')

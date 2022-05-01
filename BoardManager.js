@@ -8,7 +8,7 @@ class BoardManager {
         
         var factor = window.factor;
         this.tileWidth = factor* window.width / this.boardWidth ;
-        this.tileHeight = factor*window.height / this.boardHeight;
+        this.tileHeight = factor*window.width / this.boardHeight;
         var offset = (1 - factor)/2 * window.width
 
         this.boardTileList = []
@@ -24,7 +24,7 @@ class BoardManager {
 
         var handTileOffset = (this.tileWidth * this.boardWidth)/7;
         for (let i = 0; i < 7; i++) {
-            this.handTileList.push(new Tile(i*handTileOffset+offset,(factor + 0.075)*window.height));
+            this.handTileList.push(new Tile(i*handTileOffset+offset,(factor + 0.075)*window.width));
         }
     }
     GetBoardSquares() {
