@@ -5,7 +5,8 @@ class BoardManager {
         this.boardWidth = 9;
         this.boardHeight = 9;
         // configure tile width and height
-        var factor = 0.5
+        
+        var factor = window.factor;
         this.tileWidth = factor* window.width / this.boardWidth ;
         this.tileHeight = factor*window.height / this.boardHeight;
         var offset = (1 - factor)/2 * window.width
