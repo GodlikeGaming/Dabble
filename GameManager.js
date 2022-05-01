@@ -9,7 +9,7 @@ class GameManager {
         // mouse controls
         this.selectedPiece = null;
         this.currentStatusMessage = {msg: "", id: 0};
-        // word count variables
+        // move count variables
         this.maxNumberOfMoves = 7;
         this.numberOfMoves = 0;
 
@@ -160,7 +160,67 @@ class GameManager {
                     update.text(d => `Points: ${d}`)
                 )
 
+        // button koordinates
+        var concedeButtonX = 800
+        var concedeButtonY = 400
+
+        var shuffleButtonX = 800;
+        var shuffleButtonY = 550
+        
+        var submitButtonX = 800;
         var submitButtonY = 700;
+
+        // button implementation
+        var data = [{id: 0}]
+        this.shuffleButton = this.g
+            .selectAll('.shuffle')
+            .data(data, d => d.id)
+            .join (enter => 
+                enter
+                    .append('rect')
+                    .attr('class', 'shuffle')
+                    .attr('width', '15%')
+                    .attr('height', '10%')
+                    .attr('x', shuffleButtonX)
+                    .attr('y', shuffleButtonY)
+                   .attr('fill', 'white')
+                   .style('stroke-width', 2)
+                   .style('stroke', 'black')
+                   .style('cursor', 'pointer')
+                   .on('mouseover', (d) => 
+                   this.shuffleButton.attr('fill', 'lightgreen')
+                   .transition()
+                   .duration(100)
+                   .attr('height', '11%')
+                   ) 
+                   .on('mouseout', (d) => 
+                   this.shuffleButton.attr('fill', 'white')
+                   .transition()
+                   .duration(100)
+                   .attr('height', '10%')) 
+                    .on('click', (d) => {
+                        this.ShufflePieces()})
+                )
+
+                this.shuffleText = this.g
+                .selectAll('.shuffleText')
+                .data(data, d => d.id)
+                .join (enter => 
+                    enter
+                        .append('text')
+                        .attr('class', 'shuffleText')
+                        .attr('x', shuffleButtonX + 75)
+                        .attr('y', shuffleButtonY + 50 + 10)
+                        .text("Shuffle")
+                        .style('text-anchor', 'middle')
+                        .style('fill', 'black')
+                        .style('font-family', 'interstateBold')
+                        .attr('font-size', 30)
+                        .attr('pointer-events', 'none'),
+                )
+
+
+        
         var data = [{id: 0}]
         this.submitButton = this.g
             .selectAll('.submit')
@@ -171,7 +231,7 @@ class GameManager {
                     .attr('class', 'submit')
                     .attr('width', '15%')
                     .attr('height', '10%')
-                    .attr('x', '800')
+                    .attr('x', submitButtonX)
                     .attr('y', submitButtonY)
                    .attr('fill', 'white')
                    .style('stroke-width', 2)
@@ -199,7 +259,7 @@ class GameManager {
                     enter
                         .append('text')
                         .attr('class', 'submitText')
-                        .attr('x', 800 + 75)
+                        .attr('x', submitButtonX + 75)
                         .attr('y', submitButtonY + 50 + 10)
                         .text("Submit")
                         .style('text-anchor', 'middle')
@@ -218,8 +278,8 @@ class GameManager {
                         .attr('class', 'concede')
                         .attr('width', '15%')
                         .attr('height', '10%')
-                        .attr('x', '800')
-                        .attr('y', 550)
+                        .attr('x', concedeButtonX)
+                        .attr('y', concedeButtonY)
                        .attr('fill', 'white')
                        .style('stroke-width', 2)
                        .style('stroke', 'black')
@@ -245,8 +305,8 @@ class GameManager {
                     enter
                         .append('text')
                         .attr('class', 'concedeText')
-                        .attr('x', 800 + 75)
-                        .attr('y', 550 + 50 + 10)
+                        .attr('x', concedeButtonX + 75)
+                        .attr('y', concedeButtonY + 50 + 10)
                         .text("Concede")
                         .style('text-anchor', 'middle')
                         .style('fill', 'black')
@@ -313,10 +373,12 @@ class GameManager {
     UpdateBoard() {
         var tiles = this.boardManager.GetSquares();
         var tilesWithNewPieces = tiles.filter(s => s.piece && !s.piece.addedToBoard);
+        var newPieces = tilesWithNewPieces.map(t => t.piece)
         var response = this.FindWords();
         // updates number of words placed
         if (response.success)
         {
+            window.pieceManager.colorValidMove(newPieces)
             this.numberOfMoves ++
             if (this.numberOfMoves === this.maxNumberOfMoves)
             {
@@ -337,6 +399,17 @@ class GameManager {
         //.style('opacity', 0)
 
         console.log(response);
+    }
+
+    ShufflePieces() {
+        var tilesInHand = this.boardManager.handTileList;
+        var piecesInHand = tilesInHand.filter(p => p.piece !== null).map(t => t.piece)
+        var shufflePieces = piecesInHand.map(value => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value)
+
+        tilesInHand.forEach(t => t.ClearTile())
+        this.boardManager.PlacePiecesInHand(shufflePieces)
     }
 
     FindWords() {

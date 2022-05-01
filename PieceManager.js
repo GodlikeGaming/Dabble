@@ -6,6 +6,7 @@ class PieceManager {
         
         this.pieceId = 0;
         this.pieceList = []
+        this.pieceColor = 'beige'
         
         this.AddMorePieces(this.gameManager.CreatePiecePrefabs(7))
 
@@ -30,6 +31,17 @@ class PieceManager {
         this.pieces.filter(d => d === piece)
         .style('stroke-width', 2)
         .style("stroke-dasharray", null)
+    }
+
+    colorValidMove(pieceToColor){
+        this.pieces 
+            .filter(d => pieceToColor.some(p => p.id === d.id))
+            .transition()
+            .duration(200)
+            .attr('fill','green')
+            .transition()
+            .duration(500)
+            .attr('fill',this.pieceColor)
     }
 
     draw(){
