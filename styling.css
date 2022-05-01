@@ -2,3 +2,7 @@
     font-family: interstateBold;
     src: url(interstate-bold.ttf);
 }
+
+text {
+    color: white;
+}
