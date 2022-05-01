@@ -5,7 +5,8 @@ class GameManager {
         this.boardManager = boardManager;
         this.englishWords = englishWords;
         this.totalPoints = 0;
-        this.pieceInBagCount = 14;
+        //this.numberOfPiecesLeftInBag = 14 - 7;
+        this.maxNumberOfPieces = 14;
         // mouse controls
         this.selectedPiece = null;
         this.currentStatusMessage = {msg: "", id: 0};
@@ -57,13 +58,13 @@ class GameManager {
     }
 
     CreatePiecePrefabs(n) {
-        n = Math.min(n, this.pieceInBagCount)
+        n = Math.min(n, this.maxNumberOfPieces)
         var tilePrefabs = [];
         for (let i = 0; i < n; i++) {
             
             tilePrefabs.push(this.TakeRandomPieceFromBag());
         }
-        this.pieceInBagCount -= n;
+        this.maxNumberOfPieces -= n;
         
         return tilePrefabs
     }
@@ -148,7 +149,7 @@ class GameManager {
                     .append('text')
                     .attr('class', 'totalPointsText')
                     .attr('x', 780)
-                    .attr('y', 0 + 50 + 10)
+                    .attr('y', 0 + 60)
                     .text(d => `Points: ${d}`)
                     .style('fill', 'black')
                     .style('font-family', 'interstateBold')
@@ -157,6 +158,25 @@ class GameManager {
                     
                     update => 
                     update.text(d => `Points: ${d}`)
+                )
+        
+        this.maxNumberOfPiecesText = this.g
+            .selectAll('.maxNumberOfPiecesText')
+            .data([this.maxNumberOfPieces])
+            .join(enter => 
+                enter
+                    .append('text')
+                    .attr('class', 'maxNumberOfPiecesText')
+                    .attr('x', 780)
+                    .attr('y', 0 + 90)
+                    .text(d => `Pieces left in bag: ${d}`)
+                    .style('fill', 'black')
+                    .style('font-family', 'interstateBold')
+                    .attr('font-size', 20)
+                    .attr('pointer-events', 'none'),
+                    
+                    update => 
+                    update.text(d => `Pieces left in bag: ${d}`)
                 )
 
         // button koordinates
@@ -387,9 +407,9 @@ class GameManager {
         else
         {
             this.boardManager.colorInvalidMove(tilesWithNewPieces)
-            this.currentStatusMessage.msg = response.msg;
-            if (this.currentStatusMessage.msg === "Word is not included in list")
+            if (response.msg === "Word is not included in list")
             {
+                this.currentStatusMessage.msg = response.msg;
                 this.statusMsg.interrupt()
                 this.statusMsg
                 .style('opacity', 1)
