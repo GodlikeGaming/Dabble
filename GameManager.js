@@ -387,6 +387,8 @@ class GameManager {
     }
 
     UpdateBoard() {
+        //
+        this.selectedPiece = null;
         var tiles = this.boardManager.GetSquares();
         var tilesWithNewPieces = tiles.filter(s => s.piece && !s.piece.addedToBoard);
         var newPieces = tilesWithNewPieces.map(t => t.piece)

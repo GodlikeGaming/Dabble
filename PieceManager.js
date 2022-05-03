@@ -63,7 +63,11 @@ class PieceManager {
             var insideTile = this.boardManager.isPointInsideTile(d.x, d.y);
             // is mouse inside square
             if (insideTile) {
-                if (d.currentTile !== insideTile) this.DeHighlight(d);
+                if (d.currentTile !== insideTile) 
+                {
+                    this.DeHighlight(d);
+                    this.gameManager.selectedPiece = null;
+                }
                 if (insideTile.piece && !insideTile.piece.addedToBoard) {
                     d.currentTile.AddPiece(insideTile.piece);
                     insideTile.AddPiece(d);
@@ -75,6 +79,7 @@ class PieceManager {
                 // piece is dropped outside of gameboard
                 this.boardManager.PlacePiecesInHand([d]);
                 this.DeHighlight(d);
+                this.selectedPiece = null;
             }
          }
          var dragstarted = (d) => {
